@@ -43,6 +43,16 @@
     flex-direction: column;
 }
 
+.tynan-wrapper {
+    flex-basis: 600px;
+    flex-grow: 1;
+    flex-shrink: 0;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
 .tab-list {
     height: $stage-menu-height;
     width: 250px; /* Match width of the toolbox */
