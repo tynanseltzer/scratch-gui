@@ -26,7 +26,8 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyDown',
                 'handleKeyUp',
                 'handleProjectChanged',
-                'handleTargetsUpdate'
+                'handleTargetsUpdate',
+                'handleBlockPrint'
             ]);
             // We have to start listening to the vm here rather than in
             // componentDidMount because the HOC mounts the wrapped component,
@@ -46,12 +47,12 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
-
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
                 document.addEventListener('keydown', this.handleKeyDown);
                 document.addEventListener('keyup', this.handleKeyUp);
+                document.addEventListener('handleBlockPrint', this.handleBlockPrint);
             }
             this.props.vm.postIOData('userData', {username: this.props.username});
         }
@@ -113,6 +114,9 @@ const vmListenerHOC = function (WrappedComponent) {
                 e.preventDefault();
             }
         }
+        handleBlockPrint (e) {
+            console.log(e);
+        }
         render () {
             const {
                 /* eslint-disable no-unused-vars */
@@ -124,6 +128,7 @@ const vmListenerHOC = function (WrappedComponent) {
                 onGreenFlag,
                 onKeyDown,
                 onKeyUp,
+                handleBlockPrint,
                 onMicListeningUpdate,
                 onMonitorsUpdate,
                 onTargetsUpdate,
@@ -147,6 +152,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onGreenFlag: PropTypes.func,
         onKeyDown: PropTypes.func,
         onKeyUp: PropTypes.func,
+        handleBlockPrint: PropTypes.func,
         onMicListeningUpdate: PropTypes.func.isRequired,
         onMonitorsUpdate: PropTypes.func.isRequired,
         onProjectChanged: PropTypes.func.isRequired,

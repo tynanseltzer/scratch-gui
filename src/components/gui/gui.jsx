@@ -331,6 +331,9 @@ const GUIComponent = props => {
                         </Box>
                         <Box className={styles.tynanWrapper}>
                             <textarea
+                                defaultValue={this.state.fields["event_description"]}
+                                onChange={this.onChange.bind(this, "event_description")}
+                                refs="event_description"
                                 rows="100"
                                 placeholder="Enter event description here">
                             </textarea>
