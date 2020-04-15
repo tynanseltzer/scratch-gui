@@ -34,23 +34,27 @@
 }
 
 .editor-wrapper {
-    flex-basis: 600px;
+    /*max-width: 200px;*/
+    flex-basis: 500px;
     flex-grow: 1;
     flex-shrink: 0;
     position: relative;
 
     display: flex;
     flex-direction: column;
+
 }
 
 .tynan-wrapper {
-    flex-basis: 600px;
+    /*max-width: 250px;*/
+    flex-basis: 250px;
     flex-grow: 1;
     flex-shrink: 0;
     position: relative;
 
     display: flex;
     flex-direction: column;
+    background-color: $motion-primary;
 }
 
 .tab-list {

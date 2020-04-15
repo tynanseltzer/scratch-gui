@@ -329,6 +329,12 @@ const GUIComponent = props => {
                                 <Backpack host={backpackHost} />
                             ) : null}
                         </Box>
+                        <Box className={styles.tynanWrapper}>
+                            <textarea
+                                rows="100"
+                                placeholder="Enter event description here">
+                            </textarea>
+                        </Box>
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                             <StageWrapper
@@ -345,9 +351,11 @@ const GUIComponent = props => {
                             </Box>
                         </Box>
                     </Box>
+
                 </Box>
                 <DragLayer />
             </Box>
+
         );
     }}</MediaQuery>);
 };
