@@ -56,6 +56,22 @@
     flex-direction: column;
     background-color: $motion-primary;
 }
+.print_button {
+    background: none;
+    border: none;
+    outline: none;
+    position: absolute;
+    bottom: 1.25rem;
+}
+
+.run_button {
+    background: none;
+    border: none;
+    outline: none;
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+}
 
 .tab-list {
     height: $stage-menu-height;

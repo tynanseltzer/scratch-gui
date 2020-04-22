@@ -27,7 +27,6 @@ const vmListenerHOC = function (WrappedComponent) {
                 'handleKeyUp',
                 'handleProjectChanged',
                 'handleTargetsUpdate',
-                'handleBlockPrint'
             ]);
             // We have to start listening to the vm here rather than in
             // componentDidMount because the HOC mounts the wrapped component,
@@ -47,12 +46,12 @@ const vmListenerHOC = function (WrappedComponent) {
             this.props.vm.on('PROJECT_START', this.props.onGreenFlag);
             this.props.vm.on('PERIPHERAL_CONNECTION_LOST_ERROR', this.props.onShowExtensionAlert);
             this.props.vm.on('MIC_LISTENING', this.props.onMicListeningUpdate);
+            this.props.vm.on('HANDLE_BLOCK_PRINT', this.handleBlockPrint);
         }
         componentDidMount () {
             if (this.props.attachKeyboardEvents) {
                 document.addEventListener('keydown', this.handleKeyDown);
                 document.addEventListener('keyup', this.handleKeyUp);
-                document.addEventListener('handleBlockPrint', this.handleBlockPrint);
             }
             this.props.vm.postIOData('userData', {username: this.props.username});
         }
@@ -115,7 +114,7 @@ const vmListenerHOC = function (WrappedComponent) {
             }
         }
         handleBlockPrint (e) {
-            console.log(e);
+            this.runtime.emit("HANDLE_BLOCK_PRINT2", e);
         }
         render () {
             const {
@@ -152,7 +151,7 @@ const vmListenerHOC = function (WrappedComponent) {
         onGreenFlag: PropTypes.func,
         onKeyDown: PropTypes.func,
         onKeyUp: PropTypes.func,
-        handleBlockPrint: PropTypes.func,
+        handleBlockPrint: PropTypes.func.isRequired,
         onMicListeningUpdate: PropTypes.func.isRequired,
         onMonitorsUpdate: PropTypes.func.isRequired,
         onProjectChanged: PropTypes.func.isRequired,

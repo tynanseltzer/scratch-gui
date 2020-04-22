@@ -39,6 +39,7 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+import Tynan from '../../containers/tynan.jsx';
 
 const messages = defineMessages({
     addExtension: {
@@ -329,15 +330,7 @@ const GUIComponent = props => {
                                 <Backpack host={backpackHost} />
                             ) : null}
                         </Box>
-                        <Box className={styles.tynanWrapper}>
-                            <textarea
-                                defaultValue={this.state.fields["event_description"]}
-                                onChange={this.onChange.bind(this, "event_description")}
-                                refs="event_description"
-                                rows="100"
-                                placeholder="Enter event description here">
-                            </textarea>
-                        </Box>
+                        <Tynan vm={vm} />
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
                             <StageWrapper
