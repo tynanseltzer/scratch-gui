@@ -17,7 +17,6 @@ class Tynan extends React.Component {
         this.handleHelper = this.handleHelper.bind(this);
         this.render = this.render.bind(this);
         this.move = this.move.bind(this);
-        this.sleep = this.sleep.bind(this);
         this.state = {value: ''};
         this.props.vm.runtime.addListener('HANDLE_BLOCK_PRINT2', this.HANDLE_BLOCK_PRINT)
     }
@@ -41,17 +40,23 @@ class Tynan extends React.Component {
         }
         else if (op.localeCompare('motion_turnright') === 0) {
             this.setState(previousState =>
-                ({value: previousState.value + ' '.repeat(4 * indent) + 'turnright(' + node.args[0] + ');\n'}));
+                ({value: previousState.value + ' '.repeat(4 * indent) + 'turnRight(' + node.args[0] + ');\n'}));
             this.handleHelper(node.right, indent);
         }
         else if (op.localeCompare('motion_turnleft') === 0) {
             this.setState(previousState =>
-                ({value: previousState.value + ' '.repeat(4 * indent) + 'turnleft(' + node.args[0] + ');\n'}));
+                ({value: previousState.value + ' '.repeat(4 * indent) + 'turnLeft(' + node.args[0] + ');\n'}));
+            this.handleHelper(node.right, indent);
+        }
+        else if (op.localeCompare('pen_clear') === 0 || op.localeCompare('pen_penDown') === 0 || op.localeCompare('pen_penUp') === 0) {
+            this.setState(previousState =>
+                ({value: previousState.value + ' '.repeat(4 * indent) + op.slice(4) + '();\n'}));
             this.handleHelper(node.right, indent);
         }
         else if (op.localeCompare('control_repeat') === 0) {
+            var letter = String.fromCharCode(105 + indent);
             this.setState(previousState => ({value:
-                    previousState.value + ' '.repeat(4 * indent) + 'for(var i = 0; i < ' + node.args[0] + '; i++) {\n'}));
+                    previousState.value + ' '.repeat(4 * indent) + 'for(var ' + letter +  ' = 0; ' + letter + ' < ' + node.args[0] + '; ' + letter + '++) {\n'}));
             this.handleHelper(node.middle, indent + 1);
             this.setState(previousState => ({value:
                     previousState.value + ' '.repeat(4 * indent) + '}\n'}));
@@ -62,41 +67,48 @@ class Tynan extends React.Component {
     handlePrintClick () {
         this.props.vm.print_blocks();
     }
-     sleep(milliseconds) {
-        let timeStart = new Date().getTime();
-        while (true) {
-            let elapsedTime = new Date().getTime() - timeStart;
-            if (elapsedTime > milliseconds) {
-                break;
-            }
-        }
-    }
 
     move (numberSteps) {
         var foo = {STEPS: numberSteps}
         var bar = {target: this.props.vm.runtime.targets[1]}
         this.props.vm.runtime.getOpcodeFunction('motion_movesteps')(foo, bar);
+        this.props.vm.runtime.requestTargetsUpdate(this.props.vm.runtime.targets[1]);
     }
 
-    turnleft (numberDegrees) {
+    clear () {
+        this.props.vm.runtime.getOpcodeFunction('pen_clear')();
+    }
+
+    penDown () {
+        var foo = {};
+        var bar = {target: this.props.vm.runtime.targets[1]}
+        this.props.vm.runtime.getOpcodeFunction('pen_penDown')(foo, bar);
+    }
+
+    penUp () {
+        var foo = {};
+        var bar = {target: this.props.vm.runtime.targets[1]}
+        this.props.vm.runtime.getOpcodeFunction('pen_penUp')(foo, bar);
+    }
+
+    turnLeft (numberDegrees) {
         var foo = {DEGREES: numberDegrees};
         var bar = {target: this.props.vm.runtime.targets[1]}
         this.props.vm.runtime.getOpcodeFunction('motion_turnleft')(foo, bar);
     }
 
-    turnright (numberDegrees) {
+    turnRight (numberDegrees) {
         var foo = {DEGREES: numberDegrees};
         var bar = {target: this.props.vm.runtime.targets[1]}
         this.props.vm.runtime.getOpcodeFunction('motion_turnright')(foo, bar);
     }
     handleRunCode () {
         var theCode = this.state.value.slice(0);
-        var funcs = ["move", "turnright", "turnleft"]
+        var funcs = ["move", "turnRight", "turnLeft", "clear", "penDown", "penUp"]
         for (var type of funcs) {
-            console.log(type)
-            theCode = theCode.replace(type, "this." + type);
+            var re = new RegExp(type, 'g')
+            theCode = theCode.replace(re, "this." + type);
         }
-        console.log(theCode)
         eval(theCode);
     }
 
@@ -135,6 +147,7 @@ class Tynan extends React.Component {
                     value={this.state.value}
                     onChange={this.handleTyping}
                     rows="100"
+                    style={{fontSize: 18}}
                 >
                 </textarea>
             </Box>

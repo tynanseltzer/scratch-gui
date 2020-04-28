@@ -51,7 +51,6 @@
     flex-grow: 1;
     flex-shrink: 0;
     position: relative;
-
     display: flex;
     flex-direction: column;
     background-color: $motion-primary;
