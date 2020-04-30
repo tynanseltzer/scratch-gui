@@ -17,6 +17,7 @@ cache:
   - node_modules
 install:
 - npm --production=false install
+- cd node_modules/scratch-vm && npm --production=false install && cd -
 script:
 - npm test
 before_deploy:
