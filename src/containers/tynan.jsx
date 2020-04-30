@@ -109,6 +109,7 @@ class Tynan extends React.Component {
             var re = new RegExp(type, 'g')
             theCode = theCode.replace(re, "this." + type);
         }
+
         eval(theCode);
     }
 
